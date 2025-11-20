@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  username  String   @unique
+  password  String
+  role_id   String
+  role      Role     @relation(fields: [role_id], references: [id])
+  blogs     Blog[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id    String   @id @default(cuid())
+  name  RoleName
+  users User[]
+}
+
+enum RoleName {
+  ADMIN
+  BLOGGER
+}
+
+model Blog {
+  id             Int          @id @default(autoincrement())
+  title          String
+  content        String
+  status         BlogStatus
+  subcategory_id String
+  user_id        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User?        @relation(fields: [userId], references: [id])
+  userId         String?
+  imageUrls      ImageUrl[]
+  subcategory    Subcategory? @relation(fields: [subcategoryId], references: [id])
+  subcategoryId  String?
+}
+
+enum BlogStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DRAFT
+}
+
+model ImageUrl {
+  id      String @id @default(cuid())
+  url     String
+  blog_id Int
+  blog    Blog   @relation(fields: [blog_id], references: [id])
+}
+
+model Category {
+  id            String        @id @default(cuid())
+  name          String
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id          String   @id @default(cuid())
+  name        String
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id])
+  blogs       Blog[]
+}
