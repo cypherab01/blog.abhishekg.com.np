@@ -3,6 +3,7 @@
 import { comparePassword } from "@/lib/password";
 import prisma from "@/lib/prisma";
 import { TLoginSchema } from "@/lib/schema/login";
+import { RoleName } from "@prisma/client";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 
@@ -65,6 +66,7 @@ export async function loginServerAction(data: TLoginSchema) {
     return {
       status: true,
       message: "User logged in successfully",
+      path: existingUser.role.name === RoleName.ADMIN ? "/admin" : "/dashboard",
     };
   } catch (error) {
     return {

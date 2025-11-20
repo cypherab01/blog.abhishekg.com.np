@@ -47,7 +47,6 @@ export default function RegisterForm() {
   const onSubmit = async (data: TRegisterSchema) => {
     const result = await registerServerAction(data);
 
-    console.log(result, "result");
     if (result.status) {
       toast.success(result.message);
       reset();

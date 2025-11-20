@@ -43,7 +43,7 @@ export default function LoginForm() {
     if (result.status) {
       toast.success(result.message);
       reset();
-      router.push("/dashboard");
+      router.push(result.path || "/dashboard");
     } else {
       toast.error(result.message);
     }
